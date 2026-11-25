@@ -1,27 +1,22 @@
 import sys
 import unittest
 from pathlib import Path
-
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+from unittest.mock import patch
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
 from streamlit.testing.v1 import AppTest
 
-
 class HostTests(unittest.TestCase):
-    def test_default_and_json_modes_render_without_model(self):
-        app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=30).run()
-        self.assertEqual(len(app.exception), 0)
-        app.radio[0].set_value('Nhập JSON từ Kaggle').run()
-        self.assertEqual(len(app.exception), 0)
+    def test_component_renders_without_model_or_api(self):
+        at=AppTest.from_file(str(ROOT/'app.py'),default_timeout=30).run()
+        self.assertEqual(len(at.exception),0)
+        self.assertTrue(len(at.get('component_instance')))
+        self.assertEqual(len(at.text_area),0)  # Editor is in the component.
 
-    def test_live_form_does_not_load_model_until_submit(self):
-        sys.modules.pop('inference', None)
-        app = AppTest.from_file(str(ROOT/'app.py'), default_timeout=30).run()
-        app.radio[0].set_value('Chạy checkpoint').run()
-        self.assertEqual(len(app.exception), 0)
-        self.assertNotIn('inference', sys.modules)
-        self.assertEqual(len(app.text_area), 4)
+    def test_remote_does_not_load_torch(self):
+        with patch.dict('os.environ',{'GLIREL_API_URL':'https://example.org'}):
+            at=AppTest.from_file(str(ROOT/'app.py'),default_timeout=30).run()
+        self.assertEqual(len(at.exception),0)
+        self.assertNotIn('torch',sys.modules)
 
-
-if __name__ == '__main__':
-    unittest.main()
+if __name__=='__main__':unittest.main()

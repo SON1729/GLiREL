@@ -1,5 +1,6 @@
 """Optional real GLiREL execution; not imported by offline demo."""
 import threading
+import os
 from pathlib import Path
 from core import validate_example
 
@@ -11,6 +12,8 @@ LOCK = threading.RLock()
 def load_model(checkpoint, device):
     import torch
     from glirel import GLiREL
+    if device == 'cpu':
+        torch.set_num_threads(min(4, os.cpu_count() or 1))
     if device == 'cuda' and not torch.cuda.is_available():
         raise ValueError('Máy chưa nhận CUDA. Chọn cpu hoặc chạy demo trên máy có GPU.')
     if checkpoint == 'jackboyla/glirel-large-v0':
@@ -25,6 +28,12 @@ def load_model(checkpoint, device):
     return model
 
 
+def model_config(model):
+    return {k: getattr(model.config, k, None) for k in (
+        'model_name', 'hidden_size', 'subtoken_pooling', 'label_embed_strategy',
+        'span_marker_mode', 'rel_mode', 'scorer', 'refine_prompt', 'refine_relation')}
+
+
 def summarize(tensor):
     return {'shape':list(tensor.shape), 'first_values':tensor.detach().float().flatten()[:8].cpu().tolist()}
 
@@ -32,6 +41,13 @@ def summarize(tensor):
 def predict(model, example):
     import torch
     validate_example(example)
+    if len(example['tokens']) > getattr(model.config, 'max_len', 384):
+        raise ValueError('Câu vượt giới hạn token của checkpoint; rút ngắn câu để không bị cắt mất thực thể.')
+    units = [x for label in example['labels'] for x in ('[REL]', label)] + ['[SEP]'] + example['tokens']
+    tokenizer = model.token_rep_layer.bert_layer.tokenizer
+    ids = tokenizer(' '.join(units), add_special_tokens=True, truncation=False)['input_ids']
+    if len(ids) > 512:
+        raise ValueError('Câu và tên nhãn vượt 512 subtoken; rút ngắn câu hoặc giảm nhãn.')
     trace, handles = {}, []
     def tensor_hook(key):
         def hook(module, args, output): trace[key] = summarize(output)
