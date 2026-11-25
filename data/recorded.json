@@ -1,0 +1,3253 @@
+{
+  "checkpoint": "model_6600",
+  "device": "cuda",
+  "config": {
+    "model_name": "microsoft/deberta-v3-large",
+    "hidden_size": 768,
+    "subtoken_pooling": "first",
+    "label_embed_strategy": "both",
+    "refine_prompt": false,
+    "refine_relation": false,
+    "scorer": "dot",
+    "rel_mode": "marker"
+  },
+  "cases": [
+    {
+      "example": {
+        "name": "01_single_fact",
+        "tokens": [
+          "Ada",
+          "works",
+          "for",
+          "Acme",
+          "."
+        ],
+        "spans": [
+          [
+            0,
+            0,
+            "PERSON"
+          ],
+          [
+            3,
+            3,
+            "ORG"
+          ]
+        ],
+        "labels": [
+          "employer",
+          "founder",
+          "headquarters location"
+        ],
+        "gold": [
+          [
+            0,
+            "employer",
+            1
+          ]
+        ]
+      },
+      "ner": [
+        [
+          0,
+          0,
+          "PERSON",
+          "Ada"
+        ],
+        [
+          3,
+          3,
+          "ORG",
+          "Acme"
+        ]
+      ],
+      "expected": [
+        [
+          [
+            0,
+            0
+          ],
+          "employer",
+          [
+            3,
+            3
+          ]
+        ]
+      ],
+      "trace": {
+        "encoder": {
+          "hidden_state": {
+            "shape": [
+              1,
+              15,
+              1024
+            ],
+            "first_values": [
+              -0.3157792389392853,
+              -0.19940127432346344,
+              0.2116203010082245,
+              -0.4754871129989624,
+              0.10738437622785568,
+              -0.33184123039245605
+            ]
+          },
+          "input_ids": [
+            [
+              1,
+              128002,
+              4619,
+              128002,
+              4734,
+              128002,
+              7020,
+              1250,
+              2,
+              20813,
+              885,
+              270,
+              63290,
+              323,
+              2
+            ]
+          ],
+          "subtokens": [
+            [
+              "[CLS]",
+              "[REL]",
+              "▁employer",
+              "[REL]",
+              "▁founder",
+              "[REL]",
+              "▁headquarters",
+              "▁location",
+              "[SEP]",
+              "▁Ada",
+              "▁works",
+              "▁for",
+              "▁Acme",
+              "▁.",
+              "[SEP]"
+            ]
+          ]
+        },
+        "prompt_and_text_units": [
+          [
+            "[REL]",
+            "employer",
+            "[REL]",
+            "founder",
+            "[REL]",
+            "headquarters location",
+            "[SEP]",
+            "Ada",
+            "works",
+            "for",
+            "Acme",
+            "."
+          ]
+        ],
+        "pooled_embeddings": {
+          "shape": [
+            1,
+            12,
+            768
+          ],
+          "first_values": [
+            -0.054061584174633026,
+            -0.32530125975608826,
+            0.5366363525390625,
+            -0.6469467878341675,
+            0.12063749879598618,
+            0.5920635461807251
+          ]
+        },
+        "text_after_rnn": {
+          "shape": [
+            1,
+            5,
+            768
+          ],
+          "first_values": [
+            0.02481658011674881,
+            -0.001144241075962782,
+            -0.007635871879756451,
+            -0.0027179671451449394,
+            0.007622594479471445,
+            0.0627460777759552
+          ]
+        },
+        "pair_projection": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.009764490649104118,
+            0.032541513442993164,
+            -0.006649376824498177,
+            -0.02065548673272133,
+            -0.013418513350188732,
+            -0.009266724810004234
+          ]
+        },
+        "label_projection": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.3566649854183197,
+            -0.5037646293640137,
+            -0.06101261079311371,
+            -0.20512047410011292,
+            0.7983153462409973,
+            -0.5728678107261658
+          ]
+        },
+        "scorer_pair_input": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.009764490649104118,
+            0.032541513442993164,
+            -0.006649376824498177,
+            -0.02065548673272133,
+            -0.013418513350188732,
+            -0.009266724810004234
+          ]
+        },
+        "scorer_label_input": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.3566649854183197,
+            -0.5037646293640137,
+            -0.06101261079311371,
+            -0.20512047410011292,
+            0.7983153462409973,
+            -0.5728678107261658
+          ]
+        },
+        "logits": {
+          "shape": [
+            1,
+            2,
+            3
+          ],
+          "first_values": [
+            0.6871376633644104,
+            -4.488165855407715,
+            -3.0082993507385254,
+            -6.205154895782471,
+            -5.9914631843566895,
+            -4.554660320281982
+          ]
+        }
+      },
+      "candidates_before_display_thresholds": [
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            3,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "employer",
+          "score": 0.6653298735618591
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            3,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "headquarters location",
+          "score": 0.04705234244465828
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            3,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "founder",
+          "score": 0.01111628208309412
+        },
+        {
+          "head_pos": [
+            3,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "headquarters location",
+          "score": 0.010408594273030758
+        },
+        {
+          "head_pos": [
+            3,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "founder",
+          "score": 0.0024937691632658243
+        },
+        {
+          "head_pos": [
+            3,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "employer",
+          "score": 0.0020149280317127705
+        }
+      ],
+      "views": [
+        {
+          "threshold": 0.01,
+          "tp": 1,
+          "fp": 3,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "employer",
+              "score": 0.6653298735618591
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "headquarters location",
+              "score": 0.04705234244465828
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "founder",
+              "score": 0.01111628208309412
+            },
+            {
+              "head_pos": [
+                3,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "Acme"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "headquarters location",
+              "score": 0.010408594273030758
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "employer",
+              "score": 0.6653298735618591
+            }
+          ]
+        },
+        {
+          "threshold": 0.5,
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "employer",
+              "score": 0.6653298735618591
+            }
+          ]
+        },
+        {
+          "threshold": 0.7,
+          "tp": 0,
+          "fp": 0,
+          "fn": 1,
+          "predictions": []
+        }
+      ]
+    },
+    {
+      "example": {
+        "name": "02_multiple_pairs",
+        "tokens": [
+          "Ada",
+          "founded",
+          "North",
+          "Labs",
+          ",",
+          "which",
+          "is",
+          "based",
+          "in",
+          "Paris",
+          "."
+        ],
+        "spans": [
+          [
+            0,
+            0,
+            "PERSON"
+          ],
+          [
+            2,
+            3,
+            "ORG"
+          ],
+          [
+            9,
+            9,
+            "LOC"
+          ]
+        ],
+        "labels": [
+          "founded by",
+          "headquarters location",
+          "employer"
+        ],
+        "gold": [
+          [
+            1,
+            "founded by",
+            0
+          ],
+          [
+            1,
+            "headquarters location",
+            2
+          ]
+        ]
+      },
+      "ner": [
+        [
+          0,
+          0,
+          "PERSON",
+          "Ada"
+        ],
+        [
+          2,
+          3,
+          "ORG",
+          "North Labs"
+        ],
+        [
+          9,
+          9,
+          "LOC",
+          "Paris"
+        ]
+      ],
+      "expected": [
+        [
+          [
+            2,
+            3
+          ],
+          "founded by",
+          [
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            2,
+            3
+          ],
+          "headquarters location",
+          [
+            9,
+            9
+          ]
+        ]
+      ],
+      "trace": {
+        "encoder": {
+          "hidden_state": {
+            "shape": [
+              1,
+              22,
+              1024
+            ],
+            "first_values": [
+              -0.24125032126903534,
+              -0.13489404320716858,
+              0.155837282538414,
+              -0.3239227831363678,
+              0.16692499816417694,
+              -0.31030702590942383
+            ]
+          },
+          "input_ids": [
+            [
+              1,
+              128002,
+              3679,
+              293,
+              128002,
+              7020,
+              1250,
+              128002,
+              4619,
+              2,
+              20813,
+              3679,
+              975,
+              15420,
+              366,
+              319,
+              269,
+              636,
+              267,
+              3045,
+              323,
+              2
+            ]
+          ],
+          "subtokens": [
+            [
+              "[CLS]",
+              "[REL]",
+              "▁founded",
+              "▁by",
+              "[REL]",
+              "▁headquarters",
+              "▁location",
+              "[REL]",
+              "▁employer",
+              "[SEP]",
+              "▁Ada",
+              "▁founded",
+              "▁North",
+              "▁Labs",
+              "▁,",
+              "▁which",
+              "▁is",
+              "▁based",
+              "▁in",
+              "▁Paris",
+              "▁.",
+              "[SEP]"
+            ]
+          ]
+        },
+        "prompt_and_text_units": [
+          [
+            "[REL]",
+            "founded by",
+            "[REL]",
+            "headquarters location",
+            "[REL]",
+            "employer",
+            "[SEP]",
+            "Ada",
+            "founded",
+            "North",
+            "Labs",
+            ",",
+            "which",
+            "is",
+            "based",
+            "in",
+            "Paris",
+            "."
+          ]
+        ],
+        "pooled_embeddings": {
+          "shape": [
+            1,
+            18,
+            768
+          ],
+          "first_values": [
+            -0.12213491648435593,
+            -0.2946089506149292,
+            0.5346341133117676,
+            -0.571975827217102,
+            0.17391523718833923,
+            0.5663790702819824
+          ]
+        },
+        "text_after_rnn": {
+          "shape": [
+            1,
+            11,
+            768
+          ],
+          "first_values": [
+            -0.0031939262989908457,
+            0.0010153339244425297,
+            -0.002866901457309723,
+            -0.0009571396512910724,
+            -0.0026301597245037556,
+            0.028460003435611725
+          ]
+        },
+        "pair_projection": {
+          "shape": [
+            1,
+            6,
+            768
+          ],
+          "first_values": [
+            -0.035533905029296875,
+            0.07747629284858704,
+            0.007725268602371216,
+            0.0276336707174778,
+            -0.06725942343473434,
+            0.04653709754347801
+          ]
+        },
+        "label_projection": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.6724813580513,
+            -0.5909923315048218,
+            -0.1806512326002121,
+            -0.5141345262527466,
+            0.1584848016500473,
+            0.15328383445739746
+          ]
+        },
+        "scorer_pair_input": {
+          "shape": [
+            1,
+            6,
+            768
+          ],
+          "first_values": [
+            -0.035533905029296875,
+            0.07747629284858704,
+            0.007725268602371216,
+            0.0276336707174778,
+            -0.06725942343473434,
+            0.04653709754347801
+          ]
+        },
+        "scorer_label_input": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.6724813580513,
+            -0.5909923315048218,
+            -0.1806512326002121,
+            -0.5141345262527466,
+            0.1584848016500473,
+            0.15328383445739746
+          ]
+        },
+        "logits": {
+          "shape": [
+            1,
+            6,
+            3
+          ],
+          "first_values": [
+            -4.128897666931152,
+            -5.773807525634766,
+            -5.5404953956604,
+            -3.5735764503479004,
+            0.3299209773540497,
+            -4.948786735534668
+          ]
+        }
+      },
+      "candidates_before_display_thresholds": [
+        {
+          "head_pos": [
+            2,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "founded by",
+          "score": 0.7165709733963013
+        },
+        {
+          "head_pos": [
+            2,
+            4
+          ],
+          "tail_pos": [
+            9,
+            10
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "headquarters location",
+          "score": 0.6403545141220093
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            9,
+            10
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "headquarters location",
+          "score": 0.581740140914917
+        },
+        {
+          "head_pos": [
+            9,
+            10
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "founded by",
+          "score": 0.17334987223148346
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            9,
+            10
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "founded by",
+          "score": 0.02728971280157566
+        },
+        {
+          "head_pos": [
+            2,
+            4
+          ],
+          "tail_pos": [
+            9,
+            10
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "founded by",
+          "score": 0.027204738929867744
+        },
+        {
+          "head_pos": [
+            2,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "headquarters location",
+          "score": 0.02319696731865406
+        },
+        {
+          "head_pos": [
+            2,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "employer",
+          "score": 0.022169101983308792
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            2,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "founded by",
+          "score": 0.015845496207475662
+        },
+        {
+          "head_pos": [
+            9,
+            10
+          ],
+          "tail_pos": [
+            2,
+            4
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "founded by",
+          "score": 0.00854445155709982
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            9,
+            10
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "employer",
+          "score": 0.007042065728455782
+        },
+        {
+          "head_pos": [
+            9,
+            10
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "employer",
+          "score": 0.006004910450428724
+        },
+        {
+          "head_pos": [
+            2,
+            4
+          ],
+          "tail_pos": [
+            9,
+            10
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "employer",
+          "score": 0.004555391613394022
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            2,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "employer",
+          "score": 0.003909240011125803
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            2,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "headquarters location",
+          "score": 0.0030982724856585264
+        },
+        {
+          "head_pos": [
+            9,
+            10
+          ],
+          "tail_pos": [
+            2,
+            4
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "employer",
+          "score": 0.0008905601571314037
+        },
+        {
+          "head_pos": [
+            9,
+            10
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "headquarters location",
+          "score": 0.0007333963876590133
+        },
+        {
+          "head_pos": [
+            9,
+            10
+          ],
+          "tail_pos": [
+            2,
+            4
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "headquarters location",
+          "score": 0.0002168603678001091
+        }
+      ],
+      "views": [
+        {
+          "threshold": 0.01,
+          "tp": 2,
+          "fp": 7,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "founded by",
+              "score": 0.7165709733963013
+            },
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.6403545141220093
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.581740140914917
+            },
+            {
+              "head_pos": [
+                9,
+                10
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "Paris"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "founded by",
+              "score": 0.17334987223148346
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "founded by",
+              "score": 0.02728971280157566
+            },
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "founded by",
+              "score": 0.027204738929867744
+            },
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "headquarters location",
+              "score": 0.02319696731865406
+            },
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "employer",
+              "score": 0.022169101983308792
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                2,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "North",
+                "Labs"
+              ],
+              "label": "founded by",
+              "score": 0.015845496207475662
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "founded by",
+              "score": 0.7165709733963013
+            },
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.6403545141220093
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.581740140914917
+            }
+          ]
+        },
+        {
+          "threshold": 0.5,
+          "tp": 2,
+          "fp": 1,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "founded by",
+              "score": 0.7165709733963013
+            },
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.6403545141220093
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                9,
+                10
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.581740140914917
+            }
+          ]
+        },
+        {
+          "threshold": 0.7,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "predictions": [
+            {
+              "head_pos": [
+                2,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "founded by",
+              "score": 0.7165709733963013
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "example": {
+        "name": "03_negation",
+        "tokens": [
+          "Ada",
+          "never",
+          "worked",
+          "for",
+          "Acme",
+          "."
+        ],
+        "spans": [
+          [
+            0,
+            0,
+            "PERSON"
+          ],
+          [
+            4,
+            4,
+            "ORG"
+          ]
+        ],
+        "labels": [
+          "employer",
+          "founder",
+          "headquarters location"
+        ],
+        "gold": []
+      },
+      "ner": [
+        [
+          0,
+          0,
+          "PERSON",
+          "Ada"
+        ],
+        [
+          4,
+          4,
+          "ORG",
+          "Acme"
+        ]
+      ],
+      "expected": [],
+      "trace": {
+        "encoder": {
+          "hidden_state": {
+            "shape": [
+              1,
+              16,
+              1024
+            ],
+            "first_values": [
+              -0.3429678678512573,
+              -0.19569319486618042,
+              0.21229518949985504,
+              -0.5046069622039795,
+              0.0678706243634224,
+              -0.3372011184692383
+            ]
+          },
+          "input_ids": [
+            [
+              1,
+              128002,
+              4619,
+              128002,
+              4734,
+              128002,
+              7020,
+              1250,
+              2,
+              20813,
+              518,
+              1103,
+              270,
+              63290,
+              323,
+              2
+            ]
+          ],
+          "subtokens": [
+            [
+              "[CLS]",
+              "[REL]",
+              "▁employer",
+              "[REL]",
+              "▁founder",
+              "[REL]",
+              "▁headquarters",
+              "▁location",
+              "[SEP]",
+              "▁Ada",
+              "▁never",
+              "▁worked",
+              "▁for",
+              "▁Acme",
+              "▁.",
+              "[SEP]"
+            ]
+          ]
+        },
+        "prompt_and_text_units": [
+          [
+            "[REL]",
+            "employer",
+            "[REL]",
+            "founder",
+            "[REL]",
+            "headquarters location",
+            "[SEP]",
+            "Ada",
+            "never",
+            "worked",
+            "for",
+            "Acme",
+            "."
+          ]
+        ],
+        "pooled_embeddings": {
+          "shape": [
+            1,
+            13,
+            768
+          ],
+          "first_values": [
+            -0.05379876494407654,
+            -0.3367845118045807,
+            0.5439214706420898,
+            -0.6222705245018005,
+            0.1303945779800415,
+            0.5947080850601196
+          ]
+        },
+        "text_after_rnn": {
+          "shape": [
+            1,
+            6,
+            768
+          ],
+          "first_values": [
+            0.031260862946510315,
+            -0.004182370379567146,
+            -0.007988767698407173,
+            -0.00366208259947598,
+            0.009413376450538635,
+            0.06349726766347885
+          ]
+        },
+        "pair_projection": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.013563807122409344,
+            0.033283911645412445,
+            -0.008624757640063763,
+            -0.023518146947026253,
+            -0.01656503975391388,
+            -0.004257808439433575
+          ]
+        },
+        "label_projection": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.3465288579463959,
+            -0.5212028622627258,
+            -0.06867821514606476,
+            -0.16635972261428833,
+            0.7718979120254517,
+            -0.5106788277626038
+          ]
+        },
+        "scorer_pair_input": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.013563807122409344,
+            0.033283911645412445,
+            -0.008624757640063763,
+            -0.023518146947026253,
+            -0.01656503975391388,
+            -0.004257808439433575
+          ]
+        },
+        "scorer_label_input": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.3465288579463959,
+            -0.5212028622627258,
+            -0.06867821514606476,
+            -0.16635972261428833,
+            0.7718979120254517,
+            -0.5106788277626038
+          ]
+        },
+        "logits": {
+          "shape": [
+            1,
+            2,
+            3
+          ],
+          "first_values": [
+            0.2089848518371582,
+            -3.9982306957244873,
+            -2.6983892917633057,
+            -5.5119099617004395,
+            -5.38281774520874,
+            -4.4920854568481445
+          ]
+        }
+      },
+      "candidates_before_display_thresholds": [
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            4,
+            5
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "employer",
+          "score": 0.5520568490028381
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            4,
+            5
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "headquarters location",
+          "score": 0.06306847184896469
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            4,
+            5
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "founder",
+          "score": 0.018017487600445747
+        },
+        {
+          "head_pos": [
+            4,
+            5
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "headquarters location",
+          "score": 0.01107327826321125
+        },
+        {
+          "head_pos": [
+            4,
+            5
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "founder",
+          "score": 0.00457384018227458
+        },
+        {
+          "head_pos": [
+            4,
+            5
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "employer",
+          "score": 0.00402214378118515
+        }
+      ],
+      "views": [
+        {
+          "threshold": 0.01,
+          "tp": 0,
+          "fp": 4,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                4,
+                5
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "employer",
+              "score": 0.5520568490028381
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                4,
+                5
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "headquarters location",
+              "score": 0.06306847184896469
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                4,
+                5
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "founder",
+              "score": 0.018017487600445747
+            },
+            {
+              "head_pos": [
+                4,
+                5
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "Acme"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "headquarters location",
+              "score": 0.01107327826321125
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                4,
+                5
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "employer",
+              "score": 0.5520568490028381
+            }
+          ]
+        },
+        {
+          "threshold": 0.5,
+          "tp": 0,
+          "fp": 1,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                4,
+                5
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "employer",
+              "score": 0.5520568490028381
+            }
+          ]
+        },
+        {
+          "threshold": 0.7,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "predictions": []
+        }
+      ]
+    },
+    {
+      "example": {
+        "name": "04_missing_label",
+        "tokens": [
+          "Ada",
+          "works",
+          "for",
+          "Acme",
+          "."
+        ],
+        "spans": [
+          [
+            0,
+            0,
+            "PERSON"
+          ],
+          [
+            3,
+            3,
+            "ORG"
+          ]
+        ],
+        "labels": [
+          "founder",
+          "headquarters location"
+        ],
+        "gold": []
+      },
+      "ner": [
+        [
+          0,
+          0,
+          "PERSON",
+          "Ada"
+        ],
+        [
+          3,
+          3,
+          "ORG",
+          "Acme"
+        ]
+      ],
+      "expected": [],
+      "trace": {
+        "encoder": {
+          "hidden_state": {
+            "shape": [
+              1,
+              13,
+              1024
+            ],
+            "first_values": [
+              -0.43771034479141235,
+              -0.23424184322357178,
+              0.221054345369339,
+              -0.6114973425865173,
+              0.03699663281440735,
+              -0.37321460247039795
+            ]
+          },
+          "input_ids": [
+            [
+              1,
+              128002,
+              4734,
+              128002,
+              7020,
+              1250,
+              2,
+              20813,
+              885,
+              270,
+              63290,
+              323,
+              2
+            ]
+          ],
+          "subtokens": [
+            [
+              "[CLS]",
+              "[REL]",
+              "▁founder",
+              "[REL]",
+              "▁headquarters",
+              "▁location",
+              "[SEP]",
+              "▁Ada",
+              "▁works",
+              "▁for",
+              "▁Acme",
+              "▁.",
+              "[SEP]"
+            ]
+          ]
+        },
+        "prompt_and_text_units": [
+          [
+            "[REL]",
+            "founder",
+            "[REL]",
+            "headquarters location",
+            "[SEP]",
+            "Ada",
+            "works",
+            "for",
+            "Acme",
+            "."
+          ]
+        ],
+        "pooled_embeddings": {
+          "shape": [
+            1,
+            10,
+            768
+          ],
+          "first_values": [
+            -0.1457439661026001,
+            -0.330561101436615,
+            0.49434250593185425,
+            -0.454106867313385,
+            0.13572987914085388,
+            0.5732371807098389
+          ]
+        },
+        "text_after_rnn": {
+          "shape": [
+            1,
+            5,
+            768
+          ],
+          "first_values": [
+            0.03339811787009239,
+            -0.011184602044522762,
+            -0.001979837892577052,
+            -0.005400438327342272,
+            0.00784432515501976,
+            0.057225365191698074
+          ]
+        },
+        "pair_projection": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.018270354717969894,
+            0.05024516582489014,
+            -0.010471878573298454,
+            -0.021755391731858253,
+            -0.0440731979906559,
+            0.03282150253653526
+          ]
+        },
+        "label_projection": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.22441540658473969,
+            -0.9912524819374084,
+            -0.034098390489816666,
+            0.06101955473423004,
+            0.6505562663078308,
+            -0.09513077139854431
+          ]
+        },
+        "scorer_pair_input": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.018270354717969894,
+            0.05024516582489014,
+            -0.010471878573298454,
+            -0.021755391731858253,
+            -0.0440731979906559,
+            0.03282150253653526
+          ]
+        },
+        "scorer_label_input": {
+          "shape": [
+            1,
+            2,
+            768
+          ],
+          "first_values": [
+            0.22441540658473969,
+            -0.9912524819374084,
+            -0.034098390489816666,
+            0.06101955473423004,
+            0.6505562663078308,
+            -0.09513077139854431
+          ]
+        },
+        "logits": {
+          "shape": [
+            1,
+            2,
+            2
+          ],
+          "first_values": [
+            -3.769998788833618,
+            -2.820394515991211,
+            -4.05267333984375,
+            -3.2545056343078613
+          ]
+        }
+      },
+      "candidates_before_display_thresholds": [
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            3,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "headquarters location",
+          "score": 0.056231994181871414
+        },
+        {
+          "head_pos": [
+            3,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "headquarters location",
+          "score": 0.037165317684412
+        },
+        {
+          "head_pos": [
+            0,
+            1
+          ],
+          "tail_pos": [
+            3,
+            4
+          ],
+          "head_text": [
+            "Ada"
+          ],
+          "tail_text": [
+            "Acme"
+          ],
+          "label": "founder",
+          "score": 0.022532666102051735
+        },
+        {
+          "head_pos": [
+            3,
+            4
+          ],
+          "tail_pos": [
+            0,
+            1
+          ],
+          "head_text": [
+            "Acme"
+          ],
+          "tail_text": [
+            "Ada"
+          ],
+          "label": "founder",
+          "score": 0.017079096287488937
+        }
+      ],
+      "views": [
+        {
+          "threshold": 0.01,
+          "tp": 0,
+          "fp": 4,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "headquarters location",
+              "score": 0.056231994181871414
+            },
+            {
+              "head_pos": [
+                3,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "Acme"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "headquarters location",
+              "score": 0.037165317684412
+            },
+            {
+              "head_pos": [
+                0,
+                1
+              ],
+              "tail_pos": [
+                3,
+                4
+              ],
+              "head_text": [
+                "Ada"
+              ],
+              "tail_text": [
+                "Acme"
+              ],
+              "label": "founder",
+              "score": 0.022532666102051735
+            },
+            {
+              "head_pos": [
+                3,
+                4
+              ],
+              "tail_pos": [
+                0,
+                1
+              ],
+              "head_text": [
+                "Acme"
+              ],
+              "tail_text": [
+                "Ada"
+              ],
+              "label": "founder",
+              "score": 0.017079096287488937
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "predictions": []
+        },
+        {
+          "threshold": 0.5,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "predictions": []
+        },
+        {
+          "threshold": 0.7,
+          "tp": 0,
+          "fp": 0,
+          "fn": 0,
+          "predictions": []
+        }
+      ]
+    },
+    {
+      "example": {
+        "name": "05_cross_sentence",
+        "tokens": [
+          "North",
+          "Labs",
+          "opened",
+          "in",
+          "2010",
+          ".",
+          "It",
+          "is",
+          "headquartered",
+          "in",
+          "Paris",
+          "."
+        ],
+        "spans": [
+          [
+            0,
+            1,
+            "ORG"
+          ],
+          [
+            6,
+            6,
+            "ORG"
+          ],
+          [
+            10,
+            10,
+            "LOC"
+          ]
+        ],
+        "labels": [
+          "headquarters location",
+          "inception",
+          "founded by"
+        ],
+        "gold": [
+          [
+            1,
+            "headquarters location",
+            2
+          ],
+          [
+            0,
+            "headquarters location",
+            2
+          ]
+        ]
+      },
+      "ner": [
+        [
+          0,
+          1,
+          "ORG",
+          "North Labs"
+        ],
+        [
+          6,
+          6,
+          "ORG",
+          "It"
+        ],
+        [
+          10,
+          10,
+          "LOC",
+          "Paris"
+        ]
+      ],
+      "expected": [
+        [
+          [
+            0,
+            1
+          ],
+          "headquarters location",
+          [
+            10,
+            10
+          ]
+        ],
+        [
+          [
+            6,
+            6
+          ],
+          "headquarters location",
+          [
+            10,
+            10
+          ]
+        ]
+      ],
+      "trace": {
+        "encoder": {
+          "hidden_state": {
+            "shape": [
+              1,
+              23,
+              1024
+            ],
+            "first_values": [
+              -0.24478581547737122,
+              -0.16019660234451294,
+              0.19517327845096588,
+              -0.32744815945625305,
+              0.1624089926481247,
+              -0.3350819945335388
+            ]
+          },
+          "input_ids": [
+            [
+              1,
+              128002,
+              7020,
+              1250,
+              128002,
+              14012,
+              128002,
+              3679,
+              293,
+              2,
+              975,
+              15420,
+              1932,
+              267,
+              1524,
+              323,
+              325,
+              269,
+              19167,
+              267,
+              3045,
+              323,
+              2
+            ]
+          ],
+          "subtokens": [
+            [
+              "[CLS]",
+              "[REL]",
+              "▁headquarters",
+              "▁location",
+              "[REL]",
+              "▁inception",
+              "[REL]",
+              "▁founded",
+              "▁by",
+              "[SEP]",
+              "▁North",
+              "▁Labs",
+              "▁opened",
+              "▁in",
+              "▁2010",
+              "▁.",
+              "▁It",
+              "▁is",
+              "▁headquartered",
+              "▁in",
+              "▁Paris",
+              "▁.",
+              "[SEP]"
+            ]
+          ]
+        },
+        "prompt_and_text_units": [
+          [
+            "[REL]",
+            "headquarters location",
+            "[REL]",
+            "inception",
+            "[REL]",
+            "founded by",
+            "[SEP]",
+            "North",
+            "Labs",
+            "opened",
+            "in",
+            "2010",
+            ".",
+            "It",
+            "is",
+            "headquartered",
+            "in",
+            "Paris",
+            "."
+          ]
+        ],
+        "pooled_embeddings": {
+          "shape": [
+            1,
+            19,
+            768
+          ],
+          "first_values": [
+            -0.07814383506774902,
+            -0.31540632247924805,
+            0.5239470601081848,
+            -0.5946696996688843,
+            0.1746264398097992,
+            0.5672688484191895
+          ]
+        },
+        "text_after_rnn": {
+          "shape": [
+            1,
+            12,
+            768
+          ],
+          "first_values": [
+            0.02523104101419449,
+            0.019066939130425453,
+            -0.010623767040669918,
+            -0.0008282889029942453,
+            -0.0009092558175325394,
+            0.04788853973150253
+          ]
+        },
+        "pair_projection": {
+          "shape": [
+            1,
+            6,
+            768
+          ],
+          "first_values": [
+            0.02427622862160206,
+            0.0648452490568161,
+            -0.012537622824311256,
+            -0.03485403209924698,
+            -0.05928770452737808,
+            0.03484833613038063
+          ]
+        },
+        "label_projection": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.26521191000938416,
+            -0.6963219046592712,
+            0.06441441178321838,
+            -0.08347879350185394,
+            1.1142882108688354,
+            -0.7079081535339355
+          ]
+        },
+        "scorer_pair_input": {
+          "shape": [
+            1,
+            6,
+            768
+          ],
+          "first_values": [
+            0.02427622862160206,
+            0.0648452490568161,
+            -0.012537622824311256,
+            -0.03485403209924698,
+            -0.05928770452737808,
+            0.03484833613038063
+          ]
+        },
+        "scorer_label_input": {
+          "shape": [
+            1,
+            3,
+            768
+          ],
+          "first_values": [
+            0.26521191000938416,
+            -0.6963219046592712,
+            0.06441441178321838,
+            -0.08347879350185394,
+            1.1142882108688354,
+            -0.7079081535339355
+          ]
+        },
+        "logits": {
+          "shape": [
+            1,
+            6,
+            3
+          ],
+          "first_values": [
+            -4.824143409729004,
+            -1.3761389255523682,
+            -2.6263651847839355,
+            1.0184102058410645,
+            -4.382807731628418,
+            -4.946167945861816
+          ]
+        }
+      },
+      "candidates_before_display_thresholds": [
+        {
+          "head_pos": [
+            0,
+            2
+          ],
+          "tail_pos": [
+            10,
+            11
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "headquarters location",
+          "score": 0.7346628308296204
+        },
+        {
+          "head_pos": [
+            6,
+            7
+          ],
+          "tail_pos": [
+            10,
+            11
+          ],
+          "head_text": [
+            "It"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "headquarters location",
+          "score": 0.7289604544639587
+        },
+        {
+          "head_pos": [
+            0,
+            2
+          ],
+          "tail_pos": [
+            6,
+            7
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "It"
+          ],
+          "label": "inception",
+          "score": 0.2016298472881317
+        },
+        {
+          "head_pos": [
+            0,
+            2
+          ],
+          "tail_pos": [
+            6,
+            7
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "It"
+          ],
+          "label": "founded by",
+          "score": 0.06746075302362442
+        },
+        {
+          "head_pos": [
+            6,
+            7
+          ],
+          "tail_pos": [
+            10,
+            11
+          ],
+          "head_text": [
+            "It"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "inception",
+          "score": 0.015382656827569008
+        },
+        {
+          "head_pos": [
+            0,
+            2
+          ],
+          "tail_pos": [
+            10,
+            11
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "inception",
+          "score": 0.012336159124970436
+        },
+        {
+          "head_pos": [
+            6,
+            7
+          ],
+          "tail_pos": [
+            10,
+            11
+          ],
+          "head_text": [
+            "It"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "founded by",
+          "score": 0.010327612049877644
+        },
+        {
+          "head_pos": [
+            10,
+            11
+          ],
+          "tail_pos": [
+            6,
+            7
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "It"
+          ],
+          "label": "inception",
+          "score": 0.008609188720583916
+        },
+        {
+          "head_pos": [
+            0,
+            2
+          ],
+          "tail_pos": [
+            6,
+            7
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "It"
+          ],
+          "label": "headquarters location",
+          "score": 0.00796941015869379
+        },
+        {
+          "head_pos": [
+            0,
+            2
+          ],
+          "tail_pos": [
+            10,
+            11
+          ],
+          "head_text": [
+            "North",
+            "Labs"
+          ],
+          "tail_text": [
+            "Paris"
+          ],
+          "label": "founded by",
+          "score": 0.007060401141643524
+        },
+        {
+          "head_pos": [
+            6,
+            7
+          ],
+          "tail_pos": [
+            0,
+            2
+          ],
+          "head_text": [
+            "It"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "inception",
+          "score": 0.0063803233206272125
+        },
+        {
+          "head_pos": [
+            10,
+            11
+          ],
+          "tail_pos": [
+            6,
+            7
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "It"
+          ],
+          "label": "founded by",
+          "score": 0.004349440336227417
+        },
+        {
+          "head_pos": [
+            6,
+            7
+          ],
+          "tail_pos": [
+            0,
+            2
+          ],
+          "head_text": [
+            "It"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "founded by",
+          "score": 0.003998910542577505
+        },
+        {
+          "head_pos": [
+            10,
+            11
+          ],
+          "tail_pos": [
+            0,
+            2
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "inception",
+          "score": 0.0004282000591047108
+        },
+        {
+          "head_pos": [
+            10,
+            11
+          ],
+          "tail_pos": [
+            0,
+            2
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "founded by",
+          "score": 0.0002896732767112553
+        },
+        {
+          "head_pos": [
+            6,
+            7
+          ],
+          "tail_pos": [
+            0,
+            2
+          ],
+          "head_text": [
+            "It"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "headquarters location",
+          "score": 0.0002474524371791631
+        },
+        {
+          "head_pos": [
+            10,
+            11
+          ],
+          "tail_pos": [
+            6,
+            7
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "It"
+          ],
+          "label": "headquarters location",
+          "score": 0.0001490436989115551
+        },
+        {
+          "head_pos": [
+            10,
+            11
+          ],
+          "tail_pos": [
+            0,
+            2
+          ],
+          "head_text": [
+            "Paris"
+          ],
+          "tail_text": [
+            "North",
+            "Labs"
+          ],
+          "label": "headquarters location",
+          "score": 1.1469095625216141e-05
+        }
+      ],
+      "views": [
+        {
+          "threshold": 0.01,
+          "tp": 2,
+          "fp": 5,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7346628308296204
+            },
+            {
+              "head_pos": [
+                6,
+                7
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "It"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7289604544639587
+            },
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                6,
+                7
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "It"
+              ],
+              "label": "inception",
+              "score": 0.2016298472881317
+            },
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                6,
+                7
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "It"
+              ],
+              "label": "founded by",
+              "score": 0.06746075302362442
+            },
+            {
+              "head_pos": [
+                6,
+                7
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "It"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "inception",
+              "score": 0.015382656827569008
+            },
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "inception",
+              "score": 0.012336159124970436
+            },
+            {
+              "head_pos": [
+                6,
+                7
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "It"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "founded by",
+              "score": 0.010327612049877644
+            }
+          ]
+        },
+        {
+          "threshold": 0.3,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7346628308296204
+            },
+            {
+              "head_pos": [
+                6,
+                7
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "It"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7289604544639587
+            }
+          ]
+        },
+        {
+          "threshold": 0.5,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7346628308296204
+            },
+            {
+              "head_pos": [
+                6,
+                7
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "It"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7289604544639587
+            }
+          ]
+        },
+        {
+          "threshold": 0.7,
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "predictions": [
+            {
+              "head_pos": [
+                0,
+                2
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "North",
+                "Labs"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7346628308296204
+            },
+            {
+              "head_pos": [
+                6,
+                7
+              ],
+              "tail_pos": [
+                10,
+                11
+              ],
+              "head_text": [
+                "It"
+              ],
+              "tail_text": [
+                "Paris"
+              ],
+              "label": "headquarters location",
+              "score": 0.7289604544639587
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
