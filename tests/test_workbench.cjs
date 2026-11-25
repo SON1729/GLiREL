@@ -8,9 +8,10 @@ const parent={postMessage:m=>messages.push(m)};
 const ctx=vm.createContext({console,JSON,Math,Map,Set,Number,String,Array,Error,crypto:{randomUUID:()=>`request-${++uid}`},
  document:{getElementById:el,querySelectorAll:()=>[],addEventListener:(n,fn)=>events[n]=fn,body:{}},window:{parent,addEventListener:(n,fn)=>events['window:'+n]=fn},
  ResizeObserver:class{observe(){}},requestAnimationFrame:fn=>fn(),setInterval:fn=>{const id=++uid;intervals.set(id,fn);return id},clearInterval:id=>intervals.delete(id),setTimeout:()=>{},URL:{},Blob:class{}});
+vm.runInContext(fs.readFileSync(path.join(root,'frontend/pipeline.js'),'utf8'),ctx);
 vm.runInContext(fs.readFileSync(path.join(root,'frontend/algorithm.js'),'utf8'),ctx);
 const run=s=>vm.runInContext(s,ctx);
-function render(b=data,response=null,version='v1'){events['window:message']({source:parent,data:{type:'streamlit:render',args:{bundle:b,library:data,backend:'unconfigured',response,version}}})}
+function render(b=data,response=null,version='v1'){events['window:message']({source:parent,data:{type:'streamlit:render',args:{bundle:b,library:data,backend:'local',response,version}}})}
 function click(act,extra={}){const button={dataset:{act,...extra},disabled:false};events.click({target:{closest:()=>button}})}
 render();assert.equal(messages[0].type,'streamlit:componentReady');assert(el('editor').innerHTML.includes('Chọn thực thể'));
 assert.deepEqual(Array.from(ctx.window.GLIREL_TEST.tokenize("Marie Curie was born in Warsaw.")),['Marie','Curie','was','born','in','Warsaw','.']);
@@ -21,6 +22,20 @@ for(let c=0;c<5;c++)for(const tab of ['flow','results','compare','math'])for(let
  run(`loadCase(S.library.cases[${c}],S.library);S.tab=${JSON.stringify(tab)};S.step=${step};render()`);
  assert(!el('view').innerHTML.includes('NaN'));assert(el('view').innerHTML.length>150);
 }
+// Tensor/logit bindings must not borrow a prefix value for a different pair.
+run('loadCase(S.library.cases[0],S.library);S.step=2');
+assert(run('stageData().op').includes('Linear'));
+assert.equal(run('storedLogit(candidates()[0]).k'),0);
+run('S.step=4');assert(run('stageData().visual').includes('chưa lưu'));
+run('S.bundle={...S.bundle,config:{...S.bundle.config,span_marker_mode:"markerv2"}}');
+assert(run('stageData().visual').includes('markerv2 lấy trung bình'));
+assert(!run('stageData().visual').includes('FFN_start'));
+run('S.step=6;S.bundle.config.scorer="concat_proj"');
+assert(run('stageData().math').includes('MLP'));
+run('loadCase(S.library.cases[1],S.library)');
+assert.equal(run('storedLogit(candidates()[0])'),null);
+assert(run('exactAxes().verifiedPrefix')===6);
+
 // Sentence editing immediately invalidates every previous score.
 run('loadCase(S.library.cases[0],S.library);S.tab="flow";render()');el('sentence').value='Marie Curie was born in Warsaw.';
 events.input({target:{id:'sentence',value:el('sentence').value}});
@@ -41,7 +56,7 @@ run('S.busy=true;S.requestId="success";S.annotated=false');
 render(data,{id:'success',status:'ok'},'v2');assert.equal(run('S.busy'),false);assert(run('candidates().length')>0);assert.equal(run('S.annotated'),false);
 click('pin');assert.equal(run('S.pins.length'),1);
 click('step',{i:'6'});run('S.tab="flow";renderView()');click('point',{h:'0',t:'1',label:'employer'});
-assert(el('view').innerHTML.includes('logit suy ngược'));click('gold-point');assert.equal(run('S.annotated'),true);
+assert(el('view').innerHTML.includes('Logit lưu thật'));assert(el('view').innerHTML.includes('Z[0,0,0]'));click('gold-point');assert.equal(run('S.annotated'),true);
 // Scores at the threshold are excluded; top-k is per directed pair.
 run('S.threshold=candidates()[0].score');assert(!run('selection().some(x=>x.score===S.threshold)'));
 // Playback terminates at step 8, instead of looping or accumulating timers.
@@ -51,4 +66,6 @@ assert.equal(run('S.step'),7);assert.equal(run('S.playing'),false);assert.equal(
 const bad=structuredClone(data);bad.cases[0].candidates_before_display_thresholds[0].score=Infinity;assert.throws(()=>ctx.window.GLIREL_TEST.normalize(bad));
 const escaped=structuredClone(data);escaped.cases[0].example.tokens[0]='<img onerror=alert(1)>';
 render(escaped,null,'v3');assert(!el('view').innerHTML.includes('<img'));assert(el('view').innerHTML.includes('&lt;img'));
+run('S.backend="recorded";renderEditor()');assert(el('editor').innerHTML.includes('readonly'));assert(!el('editor').innerHTML.includes('id="new-label"'));
+run('S.dirty=true');const count=messages.length;click('run');assert.equal(messages.length,count);
 console.log('PASS: workbench renders; every case/stage/view; English tokenization; entity click selection; stale-score invalidation; inference request/reply/error; comparison; gold; threshold; playback; escaping.');

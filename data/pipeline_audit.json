@@ -1,0 +1,119 @@
+{
+  "source_commit": "1f485a268c2144cdc0221bcf0b24152f93c0a155",
+  "scope": "Recorded inference traces; not a model-weight or benchmark reproduction test.",
+  "checked_logits": 28,
+  "cases": [
+    {
+      "name": "01_single_fact",
+      "tokens": 5,
+      "entities": 2,
+      "labels": 3,
+      "prompt_units": 12,
+      "pairs": 2,
+      "logits_checked": 6,
+      "max_sigmoid_error": 9.9586620061487e-09,
+      "checks": {
+        "prompt_units": true,
+        "tokenrep_shape": true,
+        "text_shape": true,
+        "label_shape": true,
+        "pair_scorer_shape": true,
+        "label_scorer_shape": true,
+        "scorer_matrix_shape": true,
+        "complete_candidate_grid": true,
+        "saved_logits_match_sigmoid": true
+      }
+    },
+    {
+      "name": "02_multiple_pairs",
+      "tokens": 11,
+      "entities": 3,
+      "labels": 3,
+      "prompt_units": 18,
+      "pairs": 6,
+      "logits_checked": 6,
+      "max_sigmoid_error": 8.375654947379019e-09,
+      "checks": {
+        "prompt_units": true,
+        "tokenrep_shape": true,
+        "text_shape": true,
+        "label_shape": true,
+        "pair_scorer_shape": true,
+        "label_scorer_shape": true,
+        "scorer_matrix_shape": true,
+        "complete_candidate_grid": true,
+        "saved_logits_match_sigmoid": true
+      }
+    },
+    {
+      "name": "03_negation",
+      "tokens": 6,
+      "entities": 2,
+      "labels": 3,
+      "prompt_units": 13,
+      "pairs": 2,
+      "logits_checked": 6,
+      "max_sigmoid_error": 3.7787510120956824e-08,
+      "checks": {
+        "prompt_units": true,
+        "tokenrep_shape": true,
+        "text_shape": true,
+        "label_shape": true,
+        "pair_scorer_shape": true,
+        "label_scorer_shape": true,
+        "scorer_matrix_shape": true,
+        "complete_candidate_grid": true,
+        "saved_logits_match_sigmoid": true
+      }
+    },
+    {
+      "name": "04_missing_label",
+      "tokens": 5,
+      "entities": 2,
+      "labels": 2,
+      "prompt_units": 10,
+      "pairs": 2,
+      "logits_checked": 4,
+      "max_sigmoid_error": 3.120815918189468e-09,
+      "checks": {
+        "prompt_units": true,
+        "tokenrep_shape": true,
+        "text_shape": true,
+        "label_shape": true,
+        "pair_scorer_shape": true,
+        "label_scorer_shape": true,
+        "scorer_matrix_shape": true,
+        "complete_candidate_grid": true,
+        "saved_logits_match_sigmoid": true
+      }
+    },
+    {
+      "name": "05_cross_sentence",
+      "tokens": 12,
+      "entities": 3,
+      "labels": 3,
+      "prompt_units": 19,
+      "pairs": 6,
+      "logits_checked": 6,
+      "max_sigmoid_error": 2.6141556447312198e-08,
+      "checks": {
+        "prompt_units": true,
+        "tokenrep_shape": true,
+        "text_shape": true,
+        "label_shape": true,
+        "pair_scorer_shape": true,
+        "label_scorer_shape": true,
+        "scorer_matrix_shape": true,
+        "complete_candidate_grid": true,
+        "saved_logits_match_sigmoid": true
+      }
+    }
+  ],
+  "missing_configuration": [
+    "span_marker_mode",
+    "max_entity_pair_distance",
+    "add_entity_markers",
+    "coref_classifier"
+  ],
+  "recorded_sha256": "4e7476967de5b854da093441c62ecd71277297ddecf8b142e6163c759c09ca88"
+}

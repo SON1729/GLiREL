@@ -152,7 +152,9 @@ def main():
                             views=views))
     config = json.loads((checkpoint / "glirel_config.json").read_text(encoding="utf-8"))
     config_fields = ("model_name", "hidden_size", "subtoken_pooling", "label_embed_strategy",
-                     "refine_prompt", "refine_relation", "scorer", "rel_mode")
+                     "refine_prompt", "refine_relation", "scorer", "rel_mode", "span_marker_mode",
+                     "max_entity_pair_distance", "add_entity_markers", "coref_classifier",
+                     "max_len", "fixed_relation_types", "dropout")
     args.output.write_text(json.dumps(dict(checkpoint=checkpoint.name, device=device,
                                           config={key: config.get(key) for key in config_fields},
                                           cases=results), ensure_ascii=False, indent=2),

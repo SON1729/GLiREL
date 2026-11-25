@@ -31,7 +31,9 @@ def load_model(checkpoint, device):
 def model_config(model):
     return {k: getattr(model.config, k, None) for k in (
         'model_name', 'hidden_size', 'subtoken_pooling', 'label_embed_strategy',
-        'span_marker_mode', 'rel_mode', 'scorer', 'refine_prompt', 'refine_relation')}
+        'span_marker_mode', 'rel_mode', 'scorer', 'refine_prompt', 'refine_relation',
+        'max_entity_pair_distance', 'add_entity_markers', 'coref_classifier',
+        'max_len', 'fixed_relation_types', 'dropout')}
 
 
 def summarize(tensor):
@@ -45,7 +47,7 @@ def predict(model, example):
         raise ValueError('Câu vượt giới hạn token của checkpoint; rút ngắn câu để không bị cắt mất thực thể.')
     units = [x for label in example['labels'] for x in ('[REL]', label)] + ['[SEP]'] + example['tokens']
     tokenizer = model.token_rep_layer.bert_layer.tokenizer
-    ids = tokenizer(' '.join(units), add_special_tokens=True, truncation=False)['input_ids']
+    ids = tokenizer([units], is_split_into_words=True, padding=False, truncation=False)['input_ids'][0]
     if len(ids) > 512:
         raise ValueError('Câu và tên nhãn vượt 512 subtoken; rút ngắn câu hoặc giảm nhãn.')
     trace, handles = {}, []
@@ -62,16 +64,30 @@ def predict(model, example):
     def pooling_hook(module, args, output):
         trace['prompt_and_text_units'] = args[0]
         trace['pooled_embeddings'] = summarize(output['embeddings'])
+        trace['label_axis'] = args[0][0][1:2*len(example['labels']):2]
+        aligned = tokenizer(args[0], is_split_into_words=True, padding=True, truncation=False)
+        if aligned['input_ids'] == trace.get('encoder', {}).get('input_ids'):
+            trace['encoder']['word_ids'] = [aligned.word_ids(batch_index=i) for i in range(len(args[0]))]
+    def pair_hook(module, args, kwargs, output):
+        trace['pair_projection'] = summarize(output)
+        indices = kwargs.get('relations_idx')
+        if indices is not None:
+            trace['pair_axis'] = indices.detach().cpu().tolist()[0]
     def score_hook(module, args, output):
         trace['scorer_pair_input'], trace['scorer_label_input'] = summarize(args[0]), summarize(args[1])
         trace['logits'] = summarize(output)
+        if args[0].numel() <= 100_000:
+            trace['scorer_pair_vectors'] = args[0][0].detach().float().cpu().tolist()
+            trace['scorer_label_vectors'] = args[1][0].detach().float().cpu().tolist()
+            trace['logit_matrix'] = output[0].detach().float().cpu().tolist()
     ner = [[a,b,k,' '.join(example['tokens'][a:b+1])] for a,b,k in example['entities']]
     with LOCK:
         try:
             embedding = model.token_rep_layer.bert_layer
             handles.append(embedding.model.register_forward_hook(encoder_hook, with_kwargs=True))
             handles.append(model.token_rep_layer.register_forward_hook(pooling_hook))
-            for key, module in [('text_after_rnn',model.rnn),('pair_projection',model.span_rep_layer),
+            handles.append(model.span_rep_layer.register_forward_hook(pair_hook, with_kwargs=True))
+            for key, module in [('text_after_rnn',model.rnn),
                                 ('label_projection',model.prompt_rep_layer)]:
                 handles.append(module.register_forward_hook(tensor_hook(key)))
             handles.append(model.scorer.register_forward_hook(score_hook))

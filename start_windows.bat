@@ -25,5 +25,5 @@ if not exist ".venv\Scripts\python.exe" (
   exit /b 1
 )
 :run
-".venv\Scripts\python.exe" run_demo.py
+".venv\Scripts\python.exe" run_demo.py %*
 if errorlevel 1 pause

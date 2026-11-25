@@ -7,7 +7,6 @@ from pathlib import Path
 import streamlit as st
 import streamlit.components.v1 as components
 from core import validate_bundle, validate_example
-from transport import remote_predict
 
 ROOT = Path(__file__).resolve().parent
 st.set_page_config(page_title='GLiREL · Algorithm Workbench', page_icon='🔎', layout='wide')
@@ -31,10 +30,9 @@ def local_model(checkpoint, device):
     from inference import load_model
     return load_model(checkpoint, device)
 
-api_url = setting('GLIREL_API_URL')
-api_key = setting('GLIREL_API_KEY')
-local = importlib.util.find_spec('glirel') is not None
-backend = 'remote' if api_url else 'local' if local else 'unconfigured'
+local_enabled = os.environ.get('GLIREL_LOCAL_INFERENCE') == '1'
+local = local_enabled and importlib.util.find_spec('glirel') is not None
+backend = ('local' if local else 'local_setup') if local_enabled else 'recorded'
 saved = source_bundle()
 current = st.session_state.get('trace_bundle', saved)
 version = hashlib.sha256(json.dumps(current, sort_keys=True).encode()).hexdigest()
@@ -50,15 +48,13 @@ if isinstance(request, dict) and request.get('action') == 'predict':
             example = validate_example(request['example'])
             if len(example['tokens']) > 256 or len(example['entities']) > 10 or len(example['labels']) > 12:
                 raise ValueError('Mỗi lượt nhận tối đa 256 token, 10 thực thể và 12 nhãn.')
-            if backend == 'remote':
-                result = remote_predict(api_url, api_key, example)
-            elif backend == 'local':
+            if backend == 'local':
                 from inference import predict, model_config
                 checkpoint = setting('GLIREL_CHECKPOINT', 'jackboyla/glirel-large-v0')
                 model = local_model(checkpoint, setting('GLIREL_DEVICE', 'cpu'))
                 result = dict(checkpoint=checkpoint, config=model_config(model), cases=[predict(model, example)])
             else:
-                raise ValueError('Chưa kết nối máy chủ GLiREL. Người quản trị cần đặt GLIREL_API_URL trong Secrets của Streamlit; xem README. Bạn vẫn có thể chuẩn bị câu/thực thể/nhãn và xem các bước cấu trúc, hoặc mở ví dụ đã ghi để xem điểm thật.')
+                raise ValueError('Chạy câu mới bằng bản máy cá nhân: cài requirements-model.txt rồi mở start_local_model.bat. Bản web chỉ xem các trace, không chạy model online.')
             result = validate_bundle(result)
             returned = result['cases'][0]['example']
             if len(result['cases']) != 1 or any(returned.get(k) != example[k] for k in ('tokens', 'entities', 'labels')):

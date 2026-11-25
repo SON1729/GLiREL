@@ -1,0 +1,55 @@
+{
+  "commit": "1f485a268c2144cdc0221bcf0b24152f93c0a155",
+  "files": [
+    {
+      "path": "pyproject.toml",
+      "sha256": "e6dab691c544d0264c5d419408566aa8a858befdb5c72ce8fd92a1989ab596f8",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/pyproject.toml"
+    },
+    {
+      "path": "configs/config_few_rel.yaml",
+      "sha256": "3329e2760689d492548502113f66f601961c2148b8f1b0136424f5579c40893a",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/configs/config_few_rel.yaml"
+    },
+    {
+      "path": "glirel/model.py",
+      "sha256": "6e8f38aec61d97a9076cee1317b921de577269da458d4ec4c15474e43da2bf0e",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/model.py"
+    },
+    {
+      "path": "glirel/modules/base.py",
+      "sha256": "8ed9e9a94400b060044f4c259d662c36cd283e269fe07ae6b33b5ac7869cd8f4",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/base.py"
+    },
+    {
+      "path": "glirel/modules/evaluator.py",
+      "sha256": "ee2b256ffc9617cf632c2423969793bde12828b4fc59a6afae5b2a67813b28b5",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/evaluator.py"
+    },
+    {
+      "path": "glirel/modules/layers.py",
+      "sha256": "373a705ea613be3c7895f9573a64d72d3cb70de23e030f6c19740e07452922db",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/layers.py"
+    },
+    {
+      "path": "glirel/modules/rel_rep.py",
+      "sha256": "d3417a820872c6aa01c3200a806c93cda8c687b5ccd39febf2ade6200b0e74f3",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/rel_rep.py"
+    },
+    {
+      "path": "glirel/modules/span_rep.py",
+      "sha256": "1b7e9c86cbdee17d52fd8cc097b6bc54da89c794e85281ba9112eed1cc6388d5",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/span_rep.py"
+    },
+    {
+      "path": "glirel/modules/token_rep.py",
+      "sha256": "7dc5e034aaf5e1fbdecf9e9cbf773461fa75ff3099e78fd91910d3c4aeac53bd",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/token_rep.py"
+    },
+    {
+      "path": "glirel/modules/transformer_embeddings.py",
+      "sha256": "247bda66891703fd8ece2556f7c2d5f025800465a87a037d9e21d533032bf5e3",
+      "url": "https://raw.githubusercontent.com/jackboyla/GLiREL/1f485a268c2144cdc0221bcf0b24152f93c0a155/glirel/modules/transformer_embeddings.py"
+    }
+  ]
+}
